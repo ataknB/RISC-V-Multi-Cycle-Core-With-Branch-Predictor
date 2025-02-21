@@ -1,11 +1,13 @@
 module Perceptrone_BP#(
-    
+    parameter H = 12,           // GHR uzunluğu
+    parameter N = 4096,         // Tablo satır sayısı
+    parameter W_WIDTH = 13       // Ağırlık genişliği 
 ) (
     input logic clk,
     input logic rst,
 
-    input logic [31:0]PC_F,
-    input logic [31:0]PC_EX,
+    input logic [11:0]PC_F,
+    input logic [11:0]PC_EX,
 
     input logic branch_en_EX,
     input logic branch_en_F,
@@ -16,17 +18,27 @@ module Perceptrone_BP#(
     output logic BP_decision
 );
     
-    logic [13:0]GHR;
-    logic [13:0]Precisition_Reg;
-    logic [13:0]Hashed_Address;
-    logic [14:0]Perceptrone_Table[4095];
+    logic [11:0]GHR;
+    logic [11:0]Precisition_Reg;
+    logic [11:0]Hashed_Address;
+    logic [W_WIDTH-1:0] Perceptrone_Table [N-1:0] [H:0];
 
-    
+    logic [12:0]training_result[12:0];
 
-    logic [14:0]Perceptrone_Out[14:0];
-    logic [14:0]Cal_in[14:0];
+    logic [12:0]Perceptrone_Out[12:0];
+    logic [12:0]Cal_in[12:0];
 
     integer i = 0;
+
+    logic [W_WIDTH-1:0]result_vector; 
+
+    generate
+        for (i = 0; i < 13 ; i = i+1 ) 
+        begin
+            assign result_vector[i] = branch_result; 
+        end
+    endgenerate
+
 
     //Table ve Reg ayarlama
 
@@ -37,7 +49,8 @@ module Perceptrone_BP#(
         begin
             for(i = 0; i < 4096 ; i = i+1)
             begin
-                Perceptrone_Table[i] <= 15'd0;
+                for(i = 0; i < 13 ; i = i+1)
+                Perceptrone_Table[i] <= 8'd0;
             end
 
             GHR <= 14'd0;
@@ -49,6 +62,17 @@ module Perceptrone_BP#(
             begin
                 GHR <= {GHR[12:0], branch_result};
                 Hashed_Address <= (PC_EX ^ GHR);
+
+                    if(branch_correction)
+                    begin
+
+                        training_result[0] = Perceptrone_Table[PC_EX ^ GHR][0]  + branch_result;
+
+                        for( i = 1; i <  ; i = i+1)
+                        begin
+                            training_result[i] = Perceptrone_Table[PC_EX ^ GHR][i]  + (result_vector && GHR[i-1]);
+                        end
+                    end
             end
 
             else 
@@ -56,10 +80,7 @@ module Perceptrone_BP#(
                 GHR <= GHR;
             end    
 
-            if(branch_correction)
-            begin
-                
-            end
+            
 
         end
     end
@@ -95,10 +116,4 @@ module Perceptrone_BP#(
             end
         endgenerate
     
-
-    //Training
-
-
-
-
 endmodule
