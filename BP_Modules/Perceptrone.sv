@@ -29,13 +29,16 @@ module Perceptrone_BP#(
     logic [12:0]Cal_in[12:0];
 
     integer i = 0;
+    integer j = 0;
+    genvar x;
+    
 
     logic [W_WIDTH-1:0]result_vector; 
 
     generate
-        for (i = 0; i < 13 ; i = i+1 ) 
+        for (x = 0; x < 13 ; x = x+1 ) 
         begin
-            assign result_vector[i] = branch_result; 
+            assign result_vector[x] = branch_result; 
         end
     endgenerate
 
@@ -49,8 +52,8 @@ module Perceptrone_BP#(
         begin
             for(i = 0; i < 4096 ; i = i+1)
             begin
-                for(i = 0; i < 13 ; i = i+1)
-                Perceptrone_Table[i] <= 8'd0;
+                for(j = 0; j < 13 ; j = i+1)
+                Perceptrone_Table[i][j] <= 8'd0;
             end
 
             GHR <= 14'd0;
@@ -68,9 +71,9 @@ module Perceptrone_BP#(
 
                         training_result[0] = Perceptrone_Table[PC_EX ^ GHR][0]  + branch_result;
 
-                        for( i = 1; i <  ; i = i+1)
+                        for( x = 1; x < 13 ; x = x+1)
                         begin
-                            training_result[i] = Perceptrone_Table[PC_EX ^ GHR][i]  + (result_vector && GHR[i-1]);
+                            training_result[x] = Perceptrone_Table[PC_EX ^ GHR][x]  + (result_vector && GHR[x-1]);
                         end
                     end
             end
@@ -99,19 +102,19 @@ module Perceptrone_BP#(
                 );
     
         generate
-            for(i = 0 ; i< 15 ; i = i+1)
+            for(x = 0 ; x< 15 ; x = x+1)
             begin
-                assign Cal_in[i+1] = GHR[i] ? (Perceptrone_Out[i+1]) : (14'd0);
+                assign Cal_in[x+1] = GHR[x] ? (Perceptrone_Out[x+1]) : (14'd0);
             end
 
 
-            for(i = 2 ; i < 15 ; i = i+1)
+            for(x = 2 ; x < 15 ; x = x+1)
             begin
                 Kogge_Stone Cal_(
-                    .in0(Cal_in[i]),
-                    .in1(adder_out[i-2]),
+                    .in0(Cal_in[x]),
+                    .in1(adder_out[x-2]),
                     .sub_en(1'b0),
-                    .out(adder_out[i-1])
+                    .out(adder_out[x-1])
                 );
             end
         endgenerate

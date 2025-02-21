@@ -132,8 +132,19 @@ module Processor_Top #(
 
 	);
 	
+	Perceptrone_BP Perceptrone_BP(
+		.clk(clk),
+		.rst(rst),
+		.PC_F(PC_F),
+		.PC_EX(PC_EX),
+		.branch_en_EX(branch_en_EX),
+		.branch_en_F(branch_en_F),
+		.branch_correction(branch_correction),
+		.branch_result(alu_branch_control_EX),
+		.BP_decision(BP_decision_F)
+	);
 
-	
+	/*
 	LocalBP LocalBP(
 		.clk(clk),
 		.rst(rst),
@@ -146,7 +157,7 @@ module Processor_Top #(
 		.branch_en_EX(BP_en_EX),
 		.BP_decision(BP_decision_F)
 
-	);
+	);*/
 	
 
 	/*
