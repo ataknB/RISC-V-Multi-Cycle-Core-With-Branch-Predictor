@@ -132,8 +132,8 @@ module Processor_Top #(
 
 	);
 	
+
 	
-	/*
 	LocalBP LocalBP(
 		.clk(clk),
 		.rst(rst),
@@ -147,7 +147,7 @@ module Processor_Top #(
 		.BP_decision(BP_decision_F)
 
 	);
-	*/
+	
 
 	/*
 	BimodalBP BimodalBP(
