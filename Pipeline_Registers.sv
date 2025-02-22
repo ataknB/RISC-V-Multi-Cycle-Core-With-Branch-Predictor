@@ -106,7 +106,7 @@ module Execute_Register (
 	output logic [4:0]rs1_EX,
 	output logic [4:0]rs2_EX,
 	
-	output logic [1:0]load_type_EX,
+	output logic [2:0]load_type_EX,
 
 	output logic BP_decision_EX,
 	output logic BP_en_EX
@@ -218,7 +218,7 @@ module Memory_Register (
 			normal_MEM <= 32'd0;
 			PC_out_MEM <= 32'd0;
 			program_counter_controller_MEM <= 32'd0;
-			alu_branch_control_MEM <= 32'd0;
+			alu_branch_control_MEM <= 1'd0;
 			rd_MEM <= 32'd0;
 			rf_write_en_MEM <= 32'd0;
 			mem_read_en_MEM <= 32'd0;

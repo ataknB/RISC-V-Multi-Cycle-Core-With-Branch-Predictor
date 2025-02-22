@@ -52,6 +52,10 @@ module Processor_Top #(
 	
 	assign branch_en = alu_branch_control_MEM && program_counter_controller_MEM[1] && program_counter_controller_MEM[0];
 	
+	//Bp signals
+	logic BP_decision_F;
+	logic BP_decision_DE;
+	logic BP_decision_EX;
 
 	Kogge_Stone PC_normal(
 		.in0(PC_out_F),
@@ -114,9 +118,7 @@ module Processor_Top #(
 
 	);	
 
-	logic BP_decision_F;
-	logic BP_decision_DE;
-	logic BP_decision_EX;
+	
 	
 	Gshare_BP Gshare_BP(
 		.clk(clk),
@@ -430,6 +432,7 @@ module Processor_Top #(
 
 	assign jump_EX = (JAL_en_EX) ? (alu_out_EX) : (JALR_en_EX ? {alu_out_EX[31:1] , 1'b0} : 32'd0);
 	
+	/*
 	Kogge_Stone Branch_Calculation(
 		.in0(normal_EX),
 		.in1(imm_sign_extender_out_EX),
@@ -437,7 +440,7 @@ module Processor_Top #(
 		.sub_en(1'b0),
 		.out(branch_EX)
 	);
-	
+	*/
 
 	//////////////////////////////////////
 	Memory_Register Memory_Register_(

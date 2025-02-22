@@ -8,7 +8,7 @@ module Gshare_BP(
     input logic branch_en_EX,
     input logic branch_en_F,
 
-    output logic branch_result,
+    input logic branch_result,
     output logic BP_decision
     );
 
@@ -33,7 +33,7 @@ module Gshare_BP(
             for(i = 0; i < 4096 ; i = i+1)
             begin
                 GHT[i] <= 14'd0;
-                PHT[i] <= 2'd10;
+                PHT[i] <= 2'b10;
             end
             shifter_out <= 14'd0;
             GHT_to_PHT_EX <= 14'd0;
