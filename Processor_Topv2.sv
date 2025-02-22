@@ -60,7 +60,7 @@ module Processor_Top #(
 	Kogge_Stone PC_normal(
 		.in0(PC_out_F),
 		.in1(32'd4),
-		
+		.overflow(),
 		.sub_en(1'b0),
 		.out(normal_F)
 	);
@@ -155,7 +155,7 @@ module Processor_Top #(
 	Kogge_Stone Branch_Calculation(
 		.in0(PC_out_F),
 		.in1(BP_imm),
-		
+		.overflow(),
 		.sub_en(1'b0),
 		.out(Branch_Calculation_Kogge_Stone)
 	);

@@ -65,7 +65,7 @@ module ALU #(
 			endcase				
 		end
 	
-	Kogge_Stone Kogge_Stone_(
+	Kogge_Stone Kogge_Stone(
 		.in0(rs1),
 		.in1(rs2),
 		.sub_en(sub_en),
@@ -73,7 +73,7 @@ module ALU #(
 		.overflow(overflow)
 	);
 
-	Shifter Shifter_(
+	Shifter Shifter(
 		.in(rs1),
 		.sra(sra_en),
 		.sll(sll_en),
