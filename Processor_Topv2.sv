@@ -65,7 +65,7 @@ module Processor_Top #(
 
 	MUX_PC MUX_PC(
 		.jump(jump_EX),
-		.branch(wire_x),//branch_MEM
+		.branch(Branch_Calculation_Kogge_Stone),//branch_MEM
 		.normal_F(normal_F),
 		.normal_EX(normal_EX),
 		
@@ -131,58 +131,31 @@ module Processor_Top #(
 		.BP_decision(BP_decision_F)
 
 	);
-	
-	Perceptrone_BP Perceptrone_BP(
-		.clk(clk),
-		.rst(rst),
-		.PC_F(PC_F),
-		.PC_EX(PC_EX),
-		.branch_en_EX(branch_en_EX),
-		.branch_en_F(branch_en_F),
-		.branch_correction(branch_correction),
-		.branch_result(alu_branch_control_EX),
-		.BP_decision(BP_decision_F)
-	);
 
 	/*
-	LocalBP LocalBP(
+	BTB BTB(
 		.clk(clk),
 		.rst(rst),
-
-		.branch_en_F(BP_en_F),
 		.PC_F(PC_out_F),
 		.PC_EX(PC_out_EX),
-
-		.branch_result(alu_branch_control_EX),
-		.branch_en_EX(BP_en_EX),
-		.BP_decision(BP_decision_F)
-
-	);*/
-	
-
-	/*
-	BimodalBP BimodalBP(
-		.clk(clk),
-		.rst(rst),
-
-		.branch_en_F(BP_en_F),
-		.PC_F(PC_out_F[11:0]),
-		.PC_EX(PC_out_EX[11:0]),
-
-		.branch_result(alu_branch_control_EX),
-		.branch_en_EX(BP_en_EX),
-		.BP_decision(BP_decision_F)
-
+		.Branch_Destinaiton(branch_EX),
+		.write_en(BP_en_EX),
+		.read_en(BP_en_F),
+		.Branch_Decision(Branch_Calculation_BTB)
 	);
-	*/
+
 	logic [31:0]wire_x;
+	assign wire_x = ()
+	*/
+	
+	logic [31:0]Branch_Calculation_Kogge_Stone;
 
 	Kogge_Stone Branch_Calculation(
 		.in0(PC_out_F),
 		.in1(BP_imm),
 		
 		.sub_en(1'b0),
-		.out(wire_x)
+		.out(Branch_Calculation_Kogge_Stone)
 	);
 
 //////////////////////////////////////////////////		
@@ -456,7 +429,7 @@ module Processor_Top #(
 	assign branch_en_EX = (alu_op_EX == 4'b1010) || (alu_op_EX == 4'b1001)	|| 	(alu_op_EX == 4'b1011) || (alu_op_EX == 4'b1100);
 
 	assign jump_EX = (JAL_en_EX) ? (alu_out_EX) : (JALR_en_EX ? {alu_out_EX[31:1] , 1'b0} : 32'd0);
-	/*
+	
 	Kogge_Stone Branch_Calculation(
 		.in0(normal_EX),
 		.in1(imm_sign_extender_out_EX),
@@ -464,7 +437,7 @@ module Processor_Top #(
 		.sub_en(1'b0),
 		.out(branch_EX)
 	);
-	*/
+	
 
 	//////////////////////////////////////
 	Memory_Register Memory_Register_(
