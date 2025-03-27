@@ -133,21 +133,24 @@ module Processor_Top #(
 
 	);
 
+	logic loop_decision;
+	logic LD_en;
+
 	LoopDetector LoopDetector(
 		.clk(clk),
 		.rst(rst),
 
 		.PC_F(PC_out_F),
 		.PC_EX(PC_out_EX),
-		.PC_destination(),
+		.PC_destination(Branch_Calculation_Kogge_Stone),
 
 		.branch_en_F(BP_en_F),
 		.branch_en_EX(BP_en_EX),
 
 		.feedback_from_ALU(alu_branch_control_EX),
 
-		.loop_decision(branch_correction),
-		.LD_en(BP_en_DE)
+		.loop_decision(loop_decision),
+		.LD_en(LD_en)
 	);
 
 	/*
