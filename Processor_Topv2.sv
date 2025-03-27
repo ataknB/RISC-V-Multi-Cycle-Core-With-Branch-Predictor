@@ -60,7 +60,6 @@ module Processor_Top #(
 	Kogge_Stone PC_normal(
 		.in0(PC_out_F),
 		.in1(32'd4),
-		.overflow(),
 		.sub_en(1'b0),
 		.out(normal_F)
 	);
@@ -132,6 +131,23 @@ module Processor_Top #(
 		.branch_en_EX(BP_en_EX),
 		.BP_decision(BP_decision_F)
 
+	);
+
+	LoopDetector LoopDetector(
+		.clk(clk),
+		.rst(rst),
+
+		.PC_F(PC_out_F),
+		.PC_EX(PC_out_EX),
+		.PC_destination(),
+
+		.branch_en_F(BP_en_F),
+		.branch_en_EX(BP_en_EX),
+
+		.feedback_from_ALU(alu_branch_control_EX),
+
+		.loop_decision(branch_correction),
+		.LD_en(BP_en_DE)
 	);
 
 	/*
